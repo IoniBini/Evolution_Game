@@ -13,6 +13,7 @@ public class Atom : ScriptableObject
     [Header("Atom Variables")]
 
     public bool isCell = false;
+    public bool stuckPrevention = false;
     public float atomSpeed = 1;
     public Color atomColor;
 
