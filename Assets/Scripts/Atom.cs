@@ -12,10 +12,11 @@ public class Atom : ScriptableObject
     #region Atom Variables
     [Header("Atom Variables")]
 
-    public bool isCell = false;
     public bool stuckPrevention = false;
     public float atomSpeed = 1;
     public Color atomColor;
+    [Min(0)] public int bondNum;
+    public List<int> bondingChart;
 
     #endregion
 

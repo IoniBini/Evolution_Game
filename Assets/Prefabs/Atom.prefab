@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5446129432151648369}
   - component: {fileID: 5446129432151648370}
   - component: {fileID: 5446129432151648368}
-  - component: {fileID: 5446129432151648372}
+  - component: {fileID: 3181775019036453239}
   - component: {fileID: 5446129432151648373}
   m_Layer: 0
   m_Name: Atom
@@ -101,7 +101,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!65 &5446129432151648368
 BoxCollider:
@@ -116,18 +116,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &5446129432151648372
-SphereCollider:
+--- !u!65 &3181775019036453239
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5446129432151648269}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: e908df8cee3f12645940cb4ea959a805, type: 2}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Size: {x: 1.1, y: 1.1, z: 1.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5446129432151648373
 MonoBehaviour:
@@ -141,5 +141,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e075bdbc9e34b24b9edee0b3c7cbfd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atomProperties: {fileID: 11400000, guid: 5ba1dc403d03a874baeda6f817cb03e4, type: 2}
+  atomProperties: {fileID: 0}
   atomDir: {x: 0, y: 0, z: 0}

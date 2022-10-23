@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class AtomBehaviour : MonoBehaviour
 {
-    [SerializeField] private Atom atomProperties;
+    public Atom atomProperties;
 
     [SerializeField] private Vector3 atomDir;
     private Vector3 oldPos;
     private int dirResetCounter = 0;
+    [SerializeField] private bool isChild = false;
 
     void Start()
     {
@@ -24,9 +25,11 @@ public class AtomBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (isChild == false)
         AtomMovement();
     }
 
+    #region AtomDirection
     public void AtomDirection(Vector3 dir, Vector3 vel, Vector3 currentPos)
     {
         if (dir.x == -1) { atomDir.x = Mathf.Abs(atomDir.x) * -1; GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Abs(vel.x) * -1, vel.y, vel.z); }
@@ -47,6 +50,7 @@ public class AtomBehaviour : MonoBehaviour
 
         //Debug.Log(gameObject.name + " contact");
     }
+    #endregion
 
     public void RandomizeDirection()
     {
@@ -69,10 +73,43 @@ public class AtomBehaviour : MonoBehaviour
         Vector3 currentPos = transform.position;
 
         AtomDirection(dir, vel, currentPos);
+    }
 
-        /*if (collision.gameObject.transform.tag == "Atom")
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Atom")
         {
-            Debug.Log("contact");
-        }*/
+            for (int i = 0; i < atomProperties.bondingChart.Count; i++)
+            {
+                if (other.GetComponent<AtomBehaviour>().atomProperties.bondNum == atomProperties.bondingChart[i])
+                {
+                    if (atomProperties.bondNum > other.GetComponent<AtomBehaviour>().atomProperties.bondNum)
+                    {
+                        OtherIntoChild(other);
+                    }
+                    else if(atomProperties.bondNum == other.GetComponent<AtomBehaviour>().atomProperties.bondNum)
+                    {
+                        //OR BETTER, compare to see which one has more children attached
+
+                        if (transform.GetSiblingIndex() > other.transform.GetSiblingIndex())
+                        {
+                            OtherIntoChild(other);
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
+
+    public void OtherIntoChild(Collider other)
+    {
+        if (isChild == false)
+        {
+            Destroy(other.GetComponent<Rigidbody>());
+            other.transform.parent = transform;
+            other.GetComponent<AtomBehaviour>().isChild = true;
+        }
     }
 }

@@ -4,22 +4,36 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public int numOfInstances = 10;
     public float spawnRadius = 10;
     public GameObject atomPrefab;
 
+    public AtomSpawnRate[] atomSpawner;
+
+    [System.Serializable]
+    public struct AtomSpawnRate
+    {
+        public Atom atomScriptable;
+        public int atomSpawnRate;
+    }
+
+
     public void Start()
     {
-        for (int i = 0; i < numOfInstances; i++)
+        for (int j = 0; j < atomSpawner.Length; j++)
         {
-            var instance = Instantiate(atomPrefab);
-            instance.transform.parent = transform;
-            instance.name = "Atom " + (i + 1);
-            float posX = Random.Range(spawnRadius/2 * -1, spawnRadius/2);
-            float posY = Random.Range(spawnRadius / 2 * -1, spawnRadius / 2);
-            float posZ = Random.Range(spawnRadius / 2 * -1, spawnRadius / 2);
-            instance.transform.localPosition = new Vector3(posX, posY, posZ);
+            for (int i = 0; i < atomSpawner[j].atomSpawnRate; i++)
+            {
+                var instance = Instantiate(atomPrefab);
+                instance.GetComponent<AtomBehaviour>().atomProperties = atomSpawner[j].atomScriptable;
+                instance.transform.parent = transform;
+                instance.name = "Atom " + (i + 1);
+                float posX = Random.Range(spawnRadius / 2 * -1, spawnRadius / 2);
+                float posY = Random.Range(spawnRadius / 2 * -1, spawnRadius / 2);
+                float posZ = Random.Range(spawnRadius / 2 * -1, spawnRadius / 2);
+                instance.transform.position = new Vector3(posX, posY, posZ);
+            }
         }
+            
     }
 
     private void OnDrawGizmosSelected()

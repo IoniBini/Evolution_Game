@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a5ace7312d01684d933d57a8cb5833d, type: 3}
-  m_Name: New Atom
+  m_Name: Atom2
   m_EditorClassIdentifier: 
-  isCell: 0
   stuckPrevention: 1
-  atomSpeed: 14.6
-  atomColor: {r: 1, g: 0, b: 0, a: 0}
+  atomSpeed: 2
+  atomColor: {r: 0, g: 0.64177275, b: 1, a: 0}
+  bondNum: 0
+  bondingChart: 01000000
   visionAngle: 0
   visionRadius: 0
   health: 0
