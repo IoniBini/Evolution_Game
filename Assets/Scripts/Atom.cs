@@ -13,7 +13,9 @@ public class Atom : ScriptableObject
     [Header("Atom Variables")]
 
     public bool stuckPrevention = false;
+    public float atomSize = 1;
     public float atomSpeed = 1;
+    public bool drawAtom = true;
     public Color atomColor;
     [Min(0)] public int bondNum;
     public List<int> bondingChart;

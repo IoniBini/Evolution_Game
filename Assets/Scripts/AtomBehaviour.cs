@@ -13,6 +13,11 @@ public class AtomBehaviour : MonoBehaviour
 
     void Start()
     {
+        if (!atomProperties.drawAtom)
+        {
+            GetComponent<MeshRenderer>().enabled = false;
+        }
+
         RandomizeDirection();
 
         var target = GetComponent<Renderer>();
@@ -77,23 +82,36 @@ public class AtomBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //checks if the obj collided with is another atom
         if (other.tag == "Atom")
         {
+            //goes through the bonding chart to see which atoms this is allowed to bond with
             for (int i = 0; i < atomProperties.bondingChart.Count; i++)
             {
+                //if the other atom's atomicNum is within the list of bonds, then continue
                 if (other.GetComponent<AtomBehaviour>().atomProperties.bondNum == atomProperties.bondingChart[i])
                 {
+                    //to determine who becomes a child of who, check to see which atom has the larger atomicNum
                     if (atomProperties.bondNum > other.GetComponent<AtomBehaviour>().atomProperties.bondNum)
                     {
                         OtherIntoChild(other);
                     }
+                    //in case they have the exact same atomicNum, then continue
                     else if(atomProperties.bondNum == other.GetComponent<AtomBehaviour>().atomProperties.bondNum)
                     {
-                        //OR BETTER, compare to see which one has more children attached
-
-                        if (transform.GetSiblingIndex() > other.transform.GetSiblingIndex())
+                        //checks to see which of the two has more children, and decides which becomes a child based on who has more
+                        if (transform.childCount > other.transform.childCount)
                         {
                             OtherIntoChild(other);
+                        }
+                        //in case they also happen to have the exact same number of children, continue
+                        else if (transform.childCount == other.transform.childCount)
+                        {
+                            //the final condition is to check which of the two atoms has a higher sibling index to determine who is dominant
+                            if (transform.GetSiblingIndex() > other.transform.GetSiblingIndex())
+                            {
+                                OtherIntoChild(other);
+                            }
                         }
                     }
 
@@ -110,6 +128,10 @@ public class AtomBehaviour : MonoBehaviour
             Destroy(other.GetComponent<Rigidbody>());
             other.transform.parent = transform;
             other.GetComponent<AtomBehaviour>().isChild = true;
+            other.transform.SetSiblingIndex(transform.childCount);
+            var line = GetComponent<LineRenderer>();
+            line.positionCount++;
+            line.SetPosition(transform.childCount, other.transform.localPosition);
         }
     }
 }

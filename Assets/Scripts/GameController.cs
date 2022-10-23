@@ -26,7 +26,8 @@ public class GameController : MonoBehaviour
                 var instance = Instantiate(atomPrefab);
                 instance.GetComponent<AtomBehaviour>().atomProperties = atomSpawner[j].atomScriptable;
                 instance.transform.parent = transform;
-                instance.name = "Atom " + (i + 1);
+                instance.name = atomSpawner[j].atomScriptable.name + " " + (i + 1);
+                instance.transform.localScale = new Vector3(1,1,1) * atomSpawner[j].atomScriptable.atomSize;
                 float posX = Random.Range(spawnRadius / 2 * -1, spawnRadius / 2);
                 float posY = Random.Range(spawnRadius / 2 * -1, spawnRadius / 2);
                 float posZ = Random.Range(spawnRadius / 2 * -1, spawnRadius / 2);
