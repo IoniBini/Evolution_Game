@@ -11,6 +11,11 @@ public class AtomBehaviour : MonoBehaviour
     private int dirResetCounter = 0;
     [SerializeField] private bool isChild = false;
 
+    private Renderer target;
+    private MaterialPropertyBlock propertyBlock;
+    [HideInInspector] public Color internalColor;
+    [HideInInspector] public bool preventColorUpdate = false;
+
     void Start()
     {
         if (!atomProperties.drawAtom)
@@ -20,18 +25,45 @@ public class AtomBehaviour : MonoBehaviour
 
         RandomizeDirection();
 
-        var target = GetComponent<Renderer>();
-        var propertyBlock = new MaterialPropertyBlock();
+        target = GetComponent<Renderer>();
+        propertyBlock = new MaterialPropertyBlock();
 
-        propertyBlock.SetColor("_Color", atomProperties.atomColor);
+        if (!atomProperties.alwaysUpdateColor)
+        {
+            propertyBlock.SetColor("_Color", atomProperties.atomColor);
+            internalColor = atomProperties.atomColor;
 
-        target.SetPropertyBlock(propertyBlock);
+            target.SetPropertyBlock(propertyBlock);
+        }
     }
 
     private void Update()
     {
+        CalculateColorVector();
+
+        if (atomProperties.alwaysUpdateColor && !preventColorUpdate)
+        {
+            SetColorVector();
+        }
+
         if (isChild == false)
-        AtomMovement();
+            if (GetComponent<Rigidbody>().isKinematic == false) AtomMovement();
+    }
+
+    public void CalculateColorVector()
+    {
+        float lerpR = Mathf.InverseLerp(atomProperties.colorVector.x * -1, atomProperties.colorVector.x, transform.position.x);
+        float lerpG = Mathf.InverseLerp(atomProperties.colorVector.y * -1, atomProperties.colorVector.y, transform.position.y);
+        float lerpB = Mathf.InverseLerp(atomProperties.colorVector.z * -1, atomProperties.colorVector.z, transform.position.z);
+
+        internalColor = new Color(lerpR, lerpG, lerpB);
+    }
+
+    public void SetColorVector()
+    {
+        propertyBlock.SetColor("_Color", internalColor);
+
+        target.SetPropertyBlock(propertyBlock);
     }
 
     #region AtomDirection
@@ -97,7 +129,7 @@ public class AtomBehaviour : MonoBehaviour
                         OtherIntoChild(other);
                     }
                     //in case they have the exact same atomicNum, then continue
-                    else if(atomProperties.bondNum == other.GetComponent<AtomBehaviour>().atomProperties.bondNum)
+                    else if (atomProperties.bondNum == other.GetComponent<AtomBehaviour>().atomProperties.bondNum)
                     {
                         //checks to see which of the two has more children, and decides which becomes a child based on who has more
                         if (transform.childCount > other.transform.childCount)
@@ -125,6 +157,15 @@ public class AtomBehaviour : MonoBehaviour
     {
         if (isChild == false)
         {
+            if (atomProperties.forceFixateColorChild)
+            {
+                var atomBe = other.GetComponent<AtomBehaviour>();
+
+                atomBe.preventColorUpdate = true;
+                atomBe.propertyBlock.SetColor("_Color", atomBe.internalColor);
+                atomBe.target.SetPropertyBlock(atomBe.propertyBlock);
+            }
+
             Destroy(other.GetComponent<Rigidbody>());
             other.transform.parent = transform;
             other.GetComponent<AtomBehaviour>().isChild = true;
@@ -132,6 +173,11 @@ public class AtomBehaviour : MonoBehaviour
             var line = GetComponent<LineRenderer>();
             line.positionCount++;
             line.SetPosition(transform.childCount, other.transform.localPosition);
+        }
+
+        if (transform.childCount >= atomProperties.maxNumOfAtoms && atomProperties.maxNumOfAtoms != 0)
+        {
+            GetComponent<Rigidbody>().isKinematic = true;
         }
     }
 }

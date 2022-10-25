@@ -16,32 +16,16 @@ public class Atom : ScriptableObject
     public float atomSize = 1;
     public float atomSpeed = 1;
     public bool drawAtom = true;
+
+    public bool alwaysUpdateColor = false;
+    public bool forceFixateColorChild = false;
     public Color atomColor;
+    public Vector3 colorVector = Vector3.one;
+
     [Min(0)] public int bondNum;
+    [Tooltip("if you leave this at 0, there is no max limit of atom bonds")]
+    [Min(0)]
+    public int maxNumOfAtoms = 0;
     public List<int> bondingChart;
-
-    #endregion
-
-    [Space]
-
-    #region Cell Variables
-    [Header("Cell Variables")]
-
-    [Header("Vision")]
-    public float visionAngle;
-    public float visionRadius;
-
-    [Space]
-
-    [Header("Health")]
-    public float health;
-    public float hunger;
-
-    [Space]
-
-    [Header("Movement")]
-    public float cellSpeed;
-    public float actionSpeed;
-
     #endregion
 }

@@ -12,16 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5ace7312d01684d933d57a8cb5833d, type: 3}
   m_Name: Slowy
   m_EditorClassIdentifier: 
-  stuckPrevention: 0
-  atomSize: 1
-  atomSpeed: 2
+  stuckPrevention: 1
+  atomSize: 2
+  atomSpeed: 10
   drawAtom: 1
-  atomColor: {r: 0, g: 0.64177275, b: 1, a: 0}
+  alwaysUpdateColor: 0
+  atomColor: {r: 0, g: 0.64177275, b: 1, a: 0.5176471}
+  colorVector: {x: 283.9, y: 283.9, z: 283.9}
   bondNum: 0
+  maxNumOfAtoms: 0
   bondingChart: 01000000
-  visionAngle: 0
-  visionRadius: 0
-  health: 0
-  hunger: 0
-  cellSpeed: 0
-  actionSpeed: 0
