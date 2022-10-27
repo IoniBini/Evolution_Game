@@ -59,7 +59,7 @@ public class GameController : MonoBehaviour
             {
                 //Debug.Log("Destroying atom = " + j);
                 DestroyImmediate(tmpCount[j].gameObject);
-            }  
+            }
             else
             {
                 //Debug.Log("Destroying atom = " + j);

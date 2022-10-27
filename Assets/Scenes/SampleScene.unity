@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 157184619}
   m_LocalRotation: {x: 0.25395185, y: -0, z: -0, w: 0.9672169}
-  m_LocalPosition: {x: 0.41, y: -3.96, z: -19.79}
+  m_LocalPosition: {x: -1.2, y: 102.1, z: -216.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -434,7 +434,7 @@ MonoBehaviour:
   - atomScriptable: {fileID: 11400000, guid: 5ba1dc403d03a874baeda6f817cb03e4, type: 2}
     atomSpawnRate: 1
   - atomScriptable: {fileID: 11400000, guid: 0838f378aac87874a990886017b4d486, type: 2}
-    atomSpawnRate: 100
+    atomSpawnRate: 0
   arenas:
   - {fileID: 546616216384445239}
   - {fileID: 9062756738925377221}

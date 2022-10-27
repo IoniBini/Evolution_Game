@@ -105,6 +105,26 @@ public class AtomBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //goes through each event present inside the scriptable obj of the atom being used
+        for (int i = 0; i < atomProperties.atomicEvents.Length; i++)
+        {
+            //if it detects one of these events to be a collision one, continue
+            if (atomProperties.atomicEvents[i].triggerEvents.ToString() == "Collision")
+            {
+                //checks to see if the tag present in the event matches that of the obj collided with
+                if (collision.gameObject.tag == atomProperties.atomicEvents[i].collisionTag)
+                {
+                    //if it detects one of these event outputs to be a scale, continue
+                    if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
+                    {
+                        ChangeScale();
+                    }
+                }
+            }
+        }
+
+        //Debug.Log(atomProperties.atomicEvents[0].triggerEvents.ToString());
+
         Vector3 dir = collision.GetContact(0).normal;
         Vector3 vel = GetComponent<Rigidbody>().velocity;
         Vector3 currentPos = transform.position;
@@ -179,5 +199,10 @@ public class AtomBehaviour : MonoBehaviour
         {
             GetComponent<Rigidbody>().isKinematic = true;
         }
+    }
+
+    private void ChangeScale()
+    {
+        transform.localScale += Vector3.one;
     }
 }

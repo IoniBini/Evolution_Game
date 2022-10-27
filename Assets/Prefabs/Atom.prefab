@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3181775019036453239}
   - component: {fileID: 5446129432151648373}
   - component: {fileID: 3759027613352094538}
+  - component: {fileID: 5740456205162124760}
   m_Layer: 0
   m_Name: Atom
   m_TagString: Atom
@@ -32,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 5446129432151648269}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.49619, y: 0.49619, z: 0.49619}
+  m_LocalScale: {x: 2.4224927e+38, y: 2.4224927e+38, z: 2.4224927e+38}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -145,6 +146,23 @@ MonoBehaviour:
   atomProperties: {fileID: 0}
   atomDir: {x: 0, y: 0, z: 0}
   isChild: 0
+  internalColor: {r: 0, g: 0, b: 0, a: 0}
+  preventColorUpdate: 0
+  privateEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 8a5ace7312d01684d933d57a8cb5833d, type: 3}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!120 &3759027613352094538
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -243,3 +261,18 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
+--- !u!114 &5740456205162124760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5446129432151648269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10

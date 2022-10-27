@@ -9,7 +9,7 @@ public class Atom : ScriptableObject
     //can specify what particular atributes they want this atom to control, ignoring the other ones, which makes for a less clogged visual
     //of the atom scriptable obj
 
-    #region Atom Variables
+#region Atom Variables
     [Header("Atom Variables")]
 
     public bool stuckPrevention = false;
@@ -27,5 +27,21 @@ public class Atom : ScriptableObject
     [Min(0)]
     public int maxNumOfAtoms = 0;
     public List<int> bondingChart;
+
+    [Space]
+
+    public AtomEvents[] atomicEvents;
+
+    [System.Serializable]
+    public struct AtomEvents
+    {
+        public enum trigger { Collision, Always_Update, Becomes_Child }
+        public trigger triggerEvents;
+        [HideInInspector] public string collisionTag;
+
+        public enum output { Change_Color, Change_Scale, Atomic_Bond }
+        public output outputEvents;
+    }
+
     #endregion
 }

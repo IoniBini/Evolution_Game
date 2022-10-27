@@ -23,3 +23,7 @@ MonoBehaviour:
   bondNum: 1
   maxNumOfAtoms: 20
   bondingChart: 00000000
+  atomicEvents:
+  - triggerEvents: 0
+    collisionTag: Arena
+    outputEvents: 1
