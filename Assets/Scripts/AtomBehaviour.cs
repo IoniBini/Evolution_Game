@@ -117,7 +117,7 @@ public class AtomBehaviour : MonoBehaviour
                     //if it detects one of these event outputs to be a scale, continue
                     if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
                     {
-                        ChangeScale();
+                        ChangeScale(i);
                     }
                 }
             }
@@ -201,8 +201,9 @@ public class AtomBehaviour : MonoBehaviour
         }
     }
 
-    private void ChangeScale()
+    private void ChangeScale(int i)
     {
-        transform.localScale += Vector3.one;
+        //gonna have to make it so that it limits the minimum amount of scale it can reach, it should not be allowed to go lower than 0
+        transform.localScale += atomProperties.atomicEvents[i].scaleAmount;
     }
 }

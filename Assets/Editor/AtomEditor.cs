@@ -20,6 +20,11 @@ public class AtomEditor : Editor
                 //should add tooltip here for if equals to 0, collide with anything
                 atom.atomicEvents[i].collisionTag = EditorGUILayout.TextField("Collision " + i + " Tag", atom.atomicEvents[i].collisionTag);
             }
+
+            if (atom.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
+            {
+                atom.atomicEvents[i].scaleAmount = EditorGUILayout.Vector3Field("Change Scale " + i, atom.atomicEvents[i].scaleAmount);
+            }
         }
     }
     

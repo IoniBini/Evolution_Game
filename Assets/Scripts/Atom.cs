@@ -41,6 +41,7 @@ public class Atom : ScriptableObject
 
         public enum output { Change_Color, Change_Scale, Atomic_Bond }
         public output outputEvents;
+        [HideInInspector] public Vector3 scaleAmount;
     }
 
     #endregion
