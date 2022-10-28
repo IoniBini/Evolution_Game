@@ -13,7 +13,6 @@ public class AtomBehaviour : MonoBehaviour
 
     private Renderer target;
     private MaterialPropertyBlock propertyBlock;
-    [HideInInspector] public Color internalColor;
     [HideInInspector] public bool preventColorUpdate = false;
 
     void Start()
@@ -27,80 +26,19 @@ public class AtomBehaviour : MonoBehaviour
 
         target = GetComponent<Renderer>();
         propertyBlock = new MaterialPropertyBlock();
-
-        if (!atomProperties.alwaysUpdateColor)
-        {
-            propertyBlock.SetColor("_Color", atomProperties.atomColor);
-            internalColor = atomProperties.atomColor;
-
-            target.SetPropertyBlock(propertyBlock);
-        }
     }
 
     private void Update()
     {
-        CalculateColorVector();
+        /*CalculateColorVector();
 
         if (atomProperties.alwaysUpdateColor && !preventColorUpdate)
         {
             SetColorVector();
-        }
+        }*/
 
         if (isChild == false)
             if (GetComponent<Rigidbody>().isKinematic == false) AtomMovement();
-    }
-
-    public void CalculateColorVector()
-    {
-        float lerpR = Mathf.InverseLerp(atomProperties.colorVector.x * -1, atomProperties.colorVector.x, transform.position.x);
-        float lerpG = Mathf.InverseLerp(atomProperties.colorVector.y * -1, atomProperties.colorVector.y, transform.position.y);
-        float lerpB = Mathf.InverseLerp(atomProperties.colorVector.z * -1, atomProperties.colorVector.z, transform.position.z);
-
-        internalColor = new Color(lerpR, lerpG, lerpB);
-    }
-
-    public void SetColorVector()
-    {
-        propertyBlock.SetColor("_Color", internalColor);
-
-        target.SetPropertyBlock(propertyBlock);
-    }
-
-    #region AtomDirection
-    public void AtomDirection(Vector3 dir, Vector3 vel, Vector3 currentPos)
-    {
-        if (dir.x == -1) { atomDir.x = Mathf.Abs(atomDir.x) * -1; GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Abs(vel.x) * -1, vel.y, vel.z); }
-        if (dir.x == 1) { atomDir.x = Mathf.Abs(atomDir.x); GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Abs(vel.x), vel.y, vel.z); }
-        if (dir.y == -1) { atomDir.y = Mathf.Abs(atomDir.y) * -1; GetComponent<Rigidbody>().velocity = new Vector3(vel.x, Mathf.Abs(vel.y) * -1, vel.z); }
-        if (dir.y == 1) { atomDir.y = Mathf.Abs(atomDir.y); GetComponent<Rigidbody>().velocity = new Vector3(vel.x, Mathf.Abs(vel.y), vel.z); }
-        if (dir.z == -1) { atomDir.z = Mathf.Abs(atomDir.z) * -1; GetComponent<Rigidbody>().velocity = new Vector3(vel.x, vel.y, Mathf.Abs(vel.z) * -1); }
-        if (dir.z == 1) { atomDir.z = Mathf.Abs(atomDir.z); GetComponent<Rigidbody>().velocity = new Vector3(vel.x, vel.y, Mathf.Abs(vel.z)); }
-
-        if (currentPos == oldPos && dirResetCounter < 2)
-        {
-            dirResetCounter++;
-        }
-        else
-        {
-            if (atomProperties.stuckPrevention) RandomizeDirection();
-        }
-
-        //Debug.Log(gameObject.name + " contact");
-    }
-    #endregion
-
-    public void RandomizeDirection()
-    {
-        atomDir.x = Random.Range(-0.01f, 0.01f);
-        atomDir.y = Random.Range(-0.01f, 0.01f);
-        atomDir.z = Random.Range(-0.01f, 0.01f);
-
-        dirResetCounter = 0;
-    }
-
-    public void AtomMovement()
-    {
-        GetComponent<Rigidbody>().AddForce((atomDir) * atomProperties.atomSpeed, ForceMode.VelocityChange);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -114,22 +52,36 @@ public class AtomBehaviour : MonoBehaviour
                 //checks to see if the tag present in the event matches that of the obj collided with
                 if (collision.gameObject.tag == atomProperties.atomicEvents[i].collisionTag)
                 {
-                    //if it detects one of these event outputs to be a scale, continue
+                    //if it detects one of these event outputs to be a scale, continue. Then do the same to check each output type
                     if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
                     {
                         ChangeScale(i);
                     }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Speed")
+                    {
+                        ChangeSpeed(i);
+                    }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Color")
+                    {
+                        SetColor(i);
+                    }
+                }
+                //this makes it so that if there is nothing written in that field, collide with anything
+                else if (atomProperties.atomicEvents[i].collisionTag == "")
+                {
+
                 }
             }
         }
 
-        //Debug.Log(atomProperties.atomicEvents[0].triggerEvents.ToString());
+        //I hard coded collisions to cause a reflect effect by default because I think it would be stupid for the player to have to specify
+        //that they want to have things reflect not added by default
 
         Vector3 dir = collision.GetContact(0).normal;
         Vector3 vel = GetComponent<Rigidbody>().velocity;
         Vector3 currentPos = transform.position;
 
-        AtomDirection(dir, vel, currentPos);
+        Reflection(dir, vel, currentPos);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -173,6 +125,85 @@ public class AtomBehaviour : MonoBehaviour
         }
     }
 
+    #region Custom Voids
+
+    #region Calculate Color Vector
+    public void CalculateColorVector()
+    {
+        /*float lerpR = Mathf.InverseLerp(atomProperties.colorVector.x * -1, atomProperties.colorVector.x, transform.position.x);
+        float lerpG = Mathf.InverseLerp(atomProperties.colorVector.y * -1, atomProperties.colorVector.y, transform.position.y);
+        float lerpB = Mathf.InverseLerp(atomProperties.colorVector.z * -1, atomProperties.colorVector.z, transform.position.z);
+
+        atomProperties.atomColor = new Color(lerpR, lerpG, lerpB);*/
+    }
+    #endregion
+
+    #region Set Color Vector
+    public void SetColor(int i)
+    {
+        if (atomProperties.atomicEvents[i].setColorBasedOnPosition == 1)
+        {
+            atomProperties.atomColor = atomProperties.atomicEvents[i].fixedColor;
+            propertyBlock.SetColor("_Color", atomProperties.atomColor);
+        }
+        else
+        {
+            float lerpR = Mathf.InverseLerp(atomProperties.atomicEvents[i].colorVector.x * -1, atomProperties.atomicEvents[i].colorVector.x, transform.position.x);
+            float lerpG = Mathf.InverseLerp(atomProperties.atomicEvents[i].colorVector.y * -1, atomProperties.atomicEvents[i].colorVector.y, transform.position.y);
+            float lerpB = Mathf.InverseLerp(atomProperties.atomicEvents[i].colorVector.z * -1, atomProperties.atomicEvents[i].colorVector.z, transform.position.z);
+
+            atomProperties.atomColor = new Color(lerpR, lerpG, lerpB);
+            propertyBlock.SetColor("_Color", new Color(lerpR, lerpG, lerpB));
+        }
+        
+        target.SetPropertyBlock(propertyBlock);
+    }
+    #endregion
+
+    #region Reflection
+    public void Reflection(Vector3 dir, Vector3 vel, Vector3 currentPos)
+    {
+        //https://answers.unity.com/questions/377616/how-to-detect-which-side-of-a-box-collider-was-hit.html
+
+        if (dir.x == -1) { atomDir.x = Mathf.Abs(atomDir.x) * -1; GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Abs(vel.x) * -1, vel.y, vel.z); }
+        if (dir.x == 1) { atomDir.x = Mathf.Abs(atomDir.x); GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Abs(vel.x), vel.y, vel.z); }
+        if (dir.y == -1) { atomDir.y = Mathf.Abs(atomDir.y) * -1; GetComponent<Rigidbody>().velocity = new Vector3(vel.x, Mathf.Abs(vel.y) * -1, vel.z); }
+        if (dir.y == 1) { atomDir.y = Mathf.Abs(atomDir.y); GetComponent<Rigidbody>().velocity = new Vector3(vel.x, Mathf.Abs(vel.y), vel.z); }
+        if (dir.z == -1) { atomDir.z = Mathf.Abs(atomDir.z) * -1; GetComponent<Rigidbody>().velocity = new Vector3(vel.x, vel.y, Mathf.Abs(vel.z) * -1); }
+        if (dir.z == 1) { atomDir.z = Mathf.Abs(atomDir.z); GetComponent<Rigidbody>().velocity = new Vector3(vel.x, vel.y, Mathf.Abs(vel.z)); }
+
+        if (currentPos == oldPos && dirResetCounter < 2)
+        {
+            dirResetCounter++;
+        }
+        else
+        {
+            if (atomProperties.stuckPrevention) RandomizeDirection();
+        }
+
+        //Debug.Log(gameObject.name + " contact");
+    }
+    #endregion
+
+    #region Randomize Direction
+    public void RandomizeDirection()
+    {
+        atomDir.x = Random.Range(-0.01f, 0.01f);
+        atomDir.y = Random.Range(-0.01f, 0.01f);
+        atomDir.z = Random.Range(-0.01f, 0.01f);
+
+        dirResetCounter = 0;
+    }
+    #endregion
+
+    #region Atom Movement
+    public void AtomMovement()
+    {
+        GetComponent<Rigidbody>().AddForce((atomDir) * atomProperties.atomSpeed, ForceMode.VelocityChange);
+    }
+    #endregion
+
+    #region Other Into Child
     public void OtherIntoChild(Collider other)
     {
         if (isChild == false)
@@ -182,7 +213,7 @@ public class AtomBehaviour : MonoBehaviour
                 var atomBe = other.GetComponent<AtomBehaviour>();
 
                 atomBe.preventColorUpdate = true;
-                atomBe.propertyBlock.SetColor("_Color", atomBe.internalColor);
+                atomBe.propertyBlock.SetColor("_Color", atomProperties.atomColor);
                 atomBe.target.SetPropertyBlock(atomBe.propertyBlock);
             }
 
@@ -200,10 +231,22 @@ public class AtomBehaviour : MonoBehaviour
             GetComponent<Rigidbody>().isKinematic = true;
         }
     }
+    #endregion
 
+    #region Change Scale
     private void ChangeScale(int i)
     {
         //gonna have to make it so that it limits the minimum amount of scale it can reach, it should not be allowed to go lower than 0
         transform.localScale += atomProperties.atomicEvents[i].scaleAmount;
     }
+    #endregion
+
+    #region Change Speed
+    private void ChangeSpeed(int i)
+    {
+        atomProperties.atomSpeed += atomProperties.atomicEvents[i].speedAmount;
+    }
+    #endregion
+
+    #endregion
 }

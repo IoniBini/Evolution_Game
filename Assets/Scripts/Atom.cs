@@ -5,28 +5,30 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Atom", menuName = "Atom")]
 public class Atom : ScriptableObject
 {
-    //eventually, substitute each of the variables below for scriptable objs, bc this way then I can have a list that the user
-    //can specify what particular atributes they want this atom to control, ignoring the other ones, which makes for a less clogged visual
-    //of the atom scriptable obj
+    #region Updated Properties In Real Time
+    [Header("Updated Properties In Real Time")]
 
-#region Atom Variables
-    [Header("Atom Variables")]
+    //the values of the atom get updated in real time in the area below, so you can tweak it as you go if you wanna change it
+    //you will also be able to see the variables changing in real time as they update as well
+    //I need to make a bool which allows the user to reset the values of the scriptable obj back to default upon stop playing
+
+    [Space]
 
     public bool stuckPrevention = false;
     public float atomSize = 1;
     public float atomSpeed = 1;
     public bool drawAtom = true;
 
-    public bool alwaysUpdateColor = false;
+    //public bool alwaysUpdateColor = false;
     public bool forceFixateColorChild = false;
     public Color atomColor;
-    public Vector3 colorVector = Vector3.one;
 
     [Min(0)] public int bondNum;
     [Tooltip("if you leave this at 0, there is no max limit of atom bonds")]
     [Min(0)]
     public int maxNumOfAtoms = 0;
     public List<int> bondingChart;
+    #endregion
 
     [Space]
 
@@ -35,14 +37,16 @@ public class Atom : ScriptableObject
     [System.Serializable]
     public struct AtomEvents
     {
-        public enum trigger { Collision, Always_Update, Becomes_Child }
+        public enum trigger { Start, Collision, Trigger_Area, Always_Update, Becomes_Child, Becomes_Parent, Has_Children }
         public trigger triggerEvents;
         [HideInInspector] public string collisionTag;
 
-        public enum output { Change_Color, Change_Scale, Atomic_Bond }
+        public enum output { Change_Scale, Change_Speed, Change_Color, Atomic_Bond, Make_Kinematic, Apply_Force, Particles, Hide_Unhide }
         public output outputEvents;
         [HideInInspector] public Vector3 scaleAmount;
+        [HideInInspector] public float speedAmount;
+        [HideInInspector] public int setColorBasedOnPosition;
+        [HideInInspector] public Vector3 colorVector;
+        [HideInInspector] public Color fixedColor;
     }
-
-    #endregion
 }

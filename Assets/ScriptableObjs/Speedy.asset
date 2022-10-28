@@ -14,16 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stuckPrevention: 1
   atomSize: 3
-  atomSpeed: 1281.91
+  atomSpeed: 1000
   drawAtom: 1
-  alwaysUpdateColor: 0
   forceFixateColorChild: 1
-  atomColor: {r: 1, g: 0, b: 0, a: 1}
-  colorVector: {x: 27.32, y: 6.35, z: 5.59}
+  atomColor: {r: 1, g: 0.07661387, b: 0, a: 1}
   bondNum: 1
   maxNumOfAtoms: 20
   bondingChart: 00000000
   atomicEvents:
-  - triggerEvents: 0
+  - triggerEvents: 1
     collisionTag: Arena
-    outputEvents: 1
+    outputEvents: 2
+    scaleAmount: {x: -1, y: -1, z: -1}
+    speedAmount: 10
+    setColorBasedOnPosition: 1
+    colorVector: {x: 200, y: 200, z: 200}
+    fixedColor: {r: 0.07035947, g: 1, b: 0, a: 1}

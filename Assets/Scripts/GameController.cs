@@ -68,7 +68,8 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
+    [ExecuteInEditMode]
+    private void OnDrawGizmos()
     {
         if (arenas.Count != 0 && !gameStarted)
         {
@@ -85,11 +86,14 @@ public class GameController : MonoBehaviour
         Gizmos.color = new Color32(255, 255, 255, 100);
         Gizmos.DrawCube(transform.position, new Vector3(spawnRadius, spawnRadius, spawnRadius));
 
-        for (int i = 0; i < atomSpawner.Length; i++)
+        //probably need to choose a better way to draw this gizmo or at least make it always update
+        for (int i = 0; i < atomSpawner.Length - 1; i++)
         {
-            //Gizmos.color = atomSpawner[i].atomScriptable.atomColor;
-            Gizmos.color = new Color(atomSpawner[i].atomScriptable.atomColor.r, atomSpawner[i].atomScriptable.atomColor.g, atomSpawner[i].atomScriptable.atomColor.b, atomSpawner[i].atomScriptable.atomColor.a);
-            Gizmos.DrawCube(transform.position, atomSpawner[i].atomScriptable.colorVector);
+            Gizmos.color = atomSpawner[i].atomScriptable.atomColor;
+            Gizmos.color = new Color(atomSpawner[i].atomScriptable.atomColor.r, atomSpawner[i].atomScriptable.atomColor.g, atomSpawner[i].atomScriptable.atomColor.b, 0.4f);
+            
+            if (atomSpawner[i].atomScriptable.atomicEvents[i].setColorBasedOnPosition == 2)
+            Gizmos.DrawCube(transform.position, atomSpawner[i].atomScriptable.atomicEvents[i].colorVector);
         }
     }
 }
