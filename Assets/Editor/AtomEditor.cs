@@ -6,8 +6,6 @@ using UnityEditor;
 [CustomEditor(typeof(Atom))]
 public class AtomEditor : Editor
 {
-    private bool foldout = false;
-
 #if UNITY_EDITOR
     public override void OnInspectorGUI()
     {
@@ -26,7 +24,12 @@ public class AtomEditor : Editor
             if (atom.atomicEvents[i].triggerEvents.ToString() == "Collision")
             {
                 //should add tooltip here for if equals to nothing, collide with anything
-                atom.atomicEvents[i].collisionTag = EditorGUILayout.TextField("Collision " + " Tag", atom.atomicEvents[i].collisionTag);
+                atom.atomicEvents[i].collisionTag = EditorGUILayout.TextField("Collision Tag", atom.atomicEvents[i].collisionTag);
+
+                if (atom.atomicEvents[i].collisionTag == "Atom")
+                {
+                    atom.atomicEvents[i].specificAtom = EditorGUILayout.IntField("Specific Atom", atom.atomicEvents[i].specificAtom);
+                }
             }
             #endregion
 
@@ -45,16 +48,26 @@ public class AtomEditor : Editor
             }
             else if(atom.atomicEvents[i].outputEvents.ToString() == "Change_Color")
             {
-                //this needs to be a slider from 1 to 2
-                atom.atomicEvents[i].setColorBasedOnPosition = EditorGUILayout.IntSlider("Color Mode ", atom.atomicEvents[i].setColorBasedOnPosition, 1, 2);
+                atom.atomicEvents[i].setColorBasedOnPosition = EditorGUILayout.Toggle("Set Color Based On Position", atom.atomicEvents[i].setColorBasedOnPosition);
 
-                if (atom.atomicEvents[i].setColorBasedOnPosition == 1)
+                if (atom.atomicEvents[i].setColorBasedOnPosition == false)
                 {
                     atom.atomicEvents[i].fixedColor = EditorGUILayout.ColorField("Fixed Color ", atom.atomicEvents[i].fixedColor);
                 }
                 else
                 {
                     atom.atomicEvents[i].colorVector = EditorGUILayout.Vector3Field("Color Based in Position ", atom.atomicEvents[i].colorVector);
+                }
+            }
+            else if (atom.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
+            {
+                //the reason I decided against making each event have its own values was because each atom should only have one unique value as opposed to a
+                //value per event, which would mean that I would end up making multiple copies of the same value in the inspector, which would be pointless
+                EditorGUILayout.LabelField("Refer back to the variables above: bondNum, maxNumOfAtoms and bondingChart");
+                atom.atomicEvents[i].parent_Unparent = EditorGUILayout.Toggle("Parent / Unparent", atom.atomicEvents[i].parent_Unparent);
+                if (atom.atomicEvents[i].parent_Unparent == false)
+                {
+                    atom.atomicEvents[i].unparentForce_Radius = EditorGUILayout.Vector2Field("Unparent Force and Radius ", atom.atomicEvents[i].unparentForce_Radius);
                 }
             }
 

@@ -434,7 +434,7 @@ MonoBehaviour:
   - atomScriptable: {fileID: 11400000, guid: 5ba1dc403d03a874baeda6f817cb03e4, type: 2}
     atomSpawnRate: 1
   - atomScriptable: {fileID: 11400000, guid: 0838f378aac87874a990886017b4d486, type: 2}
-    atomSpawnRate: 0
+    atomSpawnRate: 100
   arenas:
   - {fileID: 546616216384445239}
   - {fileID: 9062756738925377221}

@@ -18,14 +18,10 @@ public class Atom : ScriptableObject
     public float atomSize = 1;
     public float atomSpeed = 1;
     public bool drawAtom = true;
-
-    //public bool alwaysUpdateColor = false;
-    public bool forceFixateColorChild = false;
     public Color atomColor;
 
     [Min(0)] public int bondNum;
-    [Tooltip("if you leave this at 0, there is no max limit of atom bonds")]
-    [Min(0)]
+    [Tooltip("if you leave this at 0, there is no max limit of atom bonds")] [Min(0)]
     public int maxNumOfAtoms = 0;
     public List<int> bondingChart;
     #endregion
@@ -40,13 +36,16 @@ public class Atom : ScriptableObject
         public enum trigger { Start, Collision, Trigger_Area, Always_Update, Becomes_Child, Becomes_Parent, Has_Children }
         public trigger triggerEvents;
         [HideInInspector] public string collisionTag;
+        [HideInInspector] public int specificAtom;
 
         public enum output { Change_Scale, Change_Speed, Change_Color, Atomic_Bond, Make_Kinematic, Apply_Force, Particles, Hide_Unhide }
         public output outputEvents;
         [HideInInspector] public Vector3 scaleAmount;
         [HideInInspector] public float speedAmount;
-        [HideInInspector] public int setColorBasedOnPosition;
+        [HideInInspector] public bool setColorBasedOnPosition;
         [HideInInspector] public Vector3 colorVector;
         [HideInInspector] public Color fixedColor;
+        [HideInInspector] public bool parent_Unparent;
+        [HideInInspector] public Vector2 unparentForce_Radius;
     }
 }

@@ -16,17 +16,18 @@ MonoBehaviour:
   atomSize: 3
   atomSpeed: 1000
   drawAtom: 1
-  forceFixateColorChild: 1
-  atomColor: {r: 1, g: 0.07661387, b: 0, a: 1}
+  atomColor: {r: 0.41968465, g: 0.20043232, b: 0.5370165, a: 1}
   bondNum: 1
   maxNumOfAtoms: 20
   bondingChart: 00000000
   atomicEvents:
   - triggerEvents: 1
-    collisionTag: Arena
-    outputEvents: 2
+    collisionTag: Atom
+    specificAtom: 0
+    outputEvents: 3
     scaleAmount: {x: -1, y: -1, z: -1}
     speedAmount: 10
     setColorBasedOnPosition: 1
     colorVector: {x: 200, y: 200, z: 200}
     fixedColor: {r: 0.07035947, g: 1, b: 0, a: 1}
+    parent_Unparent: 0

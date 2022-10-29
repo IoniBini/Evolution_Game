@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour
         {
             for (int i = 0; i < atomSpawner[j].atomSpawnRate; i++)
             {
+                //gonna need to delete the custom options here that are redundant
                 var instance = Instantiate(atomPrefab);
                 instance.GetComponent<AtomBehaviour>().atomProperties = atomSpawner[j].atomScriptable;
                 instance.transform.parent = transform;
@@ -92,7 +93,7 @@ public class GameController : MonoBehaviour
             Gizmos.color = atomSpawner[i].atomScriptable.atomColor;
             Gizmos.color = new Color(atomSpawner[i].atomScriptable.atomColor.r, atomSpawner[i].atomScriptable.atomColor.g, atomSpawner[i].atomScriptable.atomColor.b, 0.4f);
             
-            if (atomSpawner[i].atomScriptable.atomicEvents[i].setColorBasedOnPosition == 2)
+            if (atomSpawner[i].atomScriptable.atomicEvents[i].setColorBasedOnPosition == true)
             Gizmos.DrawCube(transform.position, atomSpawner[i].atomScriptable.atomicEvents[i].colorVector);
         }
     }

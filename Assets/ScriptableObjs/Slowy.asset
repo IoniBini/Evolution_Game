@@ -16,9 +16,18 @@ MonoBehaviour:
   atomSize: 2
   atomSpeed: 10
   drawAtom: 1
-  alwaysUpdateColor: 0
-  atomColor: {r: 0, g: 0.64177275, b: 1, a: 0.5176471}
-  colorVector: {x: 283.9, y: 283.9, z: 283.9}
+  atomColor: {r: 0, g: 1, b: 0.008504152, a: 0}
   bondNum: 0
   maxNumOfAtoms: 0
   bondingChart: 01000000
+  atomicEvents:
+  - triggerEvents: 1
+    collisionTag: Atom
+    specificAtom: 1
+    outputEvents: 2
+    scaleAmount: {x: 0, y: 0, z: 0}
+    speedAmount: 0
+    setColorBasedOnPosition: 0
+    colorVector: {x: 0, y: 0, z: 0}
+    fixedColor: {r: 0, g: 1, b: 0.008504152, a: 0}
+    parent_Unparent: 0
