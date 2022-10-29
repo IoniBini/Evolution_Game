@@ -15,13 +15,9 @@ public class AtomBehaviour : MonoBehaviour
     private MaterialPropertyBlock propertyBlock;
     [HideInInspector] public bool preventColorUpdate = false;
 
+    #region Atom Triggers
     void Start()
     {
-        if (!atomProperties.drawAtom)
-        {
-            GetComponent<MeshRenderer>().enabled = false;
-        }
-
         RandomizeDirection();
 
         target = GetComponent<Renderer>();
@@ -66,8 +62,23 @@ public class AtomBehaviour : MonoBehaviour
                             }
                             else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
                             {
-                                //need to also give it the option to unpair it if you want
                                 AtomicBond(collision, i);
+                            }
+                            else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+                            {
+                                ChangeKinematic(i);
+                            }
+                            else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+                            {
+                                HideUnhide(i);
+                            }
+                            else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+                            {
+                                ApplyForce(i);
+                            }
+                            else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Particles")
+                            {
+                                PlayParticle();
                             }
                         }
                     }  
@@ -151,16 +162,17 @@ public class AtomBehaviour : MonoBehaviour
             }
         }*/
     }
+#endregion
 
-    #region Custom Voids
+    #region Atom Outputs
 
-    #region Set Color Vector
+    #region Set Color
     public void SetColor(int i)
     {
         if (atomProperties.atomicEvents[i].setColorBasedOnPosition == false)
         {
             atomProperties.atomColor = atomProperties.atomicEvents[i].fixedColor;
-            propertyBlock.SetColor("_Color", atomProperties.atomColor);
+            propertyBlock.SetColor("_Color", atomProperties.atomColor * atomProperties.colorInstensity);
         }
         else
         {
@@ -169,7 +181,7 @@ public class AtomBehaviour : MonoBehaviour
             float lerpB = Mathf.InverseLerp(atomProperties.atomicEvents[i].colorVector.z * -1, atomProperties.atomicEvents[i].colorVector.z, transform.position.z);
 
             atomProperties.atomColor = new Color(lerpR, lerpG, lerpB);
-            propertyBlock.SetColor("_Color", new Color(lerpR, lerpG, lerpB));
+            propertyBlock.SetColor("_Color", new Color(lerpR, lerpG, lerpB) * atomProperties.colorInstensity);
         }
         
         target.SetPropertyBlock(propertyBlock);
@@ -196,8 +208,6 @@ public class AtomBehaviour : MonoBehaviour
         {
             if (atomProperties.stuckPrevention) RandomizeDirection();
         }
-
-        //Debug.Log(gameObject.name + " contact");
     }
     #endregion
 
@@ -219,7 +229,7 @@ public class AtomBehaviour : MonoBehaviour
     }
     #endregion
 
-    #region
+    #region Atomic Bond
     public void AtomicBond(Collision collision, int j)
     {
         //checks if the obj collided with is another atom
@@ -276,12 +286,16 @@ public class AtomBehaviour : MonoBehaviour
                 var line = GetComponent<LineRenderer>();
                 line.positionCount++;
                 line.SetPosition(transform.childCount, other.transform.localPosition);
+                line.startColor = atomProperties.atomColor;
+                line.endColor = atomProperties.atomColor;
+                line.startWidth = atomProperties.atomSize / 2;
+                line.endWidth = atomProperties.atomSize / 2;
             }
 
-            if (transform.childCount >= atomProperties.maxNumOfAtoms && atomProperties.maxNumOfAtoms != 0)
+            /*if (transform.childCount >= atomProperties.maxNumOfAtoms && atomProperties.maxNumOfAtoms != 0)
             {
                 GetComponent<Rigidbody>().isKinematic = true;
-            }
+            }*/
         }
         else
         {
@@ -314,6 +328,42 @@ public class AtomBehaviour : MonoBehaviour
         atomProperties.atomSpeed += atomProperties.atomicEvents[i].speedAmount;
     }
     #endregion
+
+    #region Change Kinematic
+    private void ChangeKinematic(int i)
+    {
+        if (atomProperties.atomicEvents[i].changeKinematic)
+            GetComponent<Rigidbody>().isKinematic = true;
+        else
+            GetComponent<Rigidbody>().isKinematic = false;
+    }
+    #endregion
+
+    #region Hide Unhide
+    private void HideUnhide(int i)
+    {
+        if (!atomProperties.atomicEvents[i].hide_Unhide)
+            GetComponent<MeshRenderer>().enabled = false;
+        else
+            GetComponent<MeshRenderer>().enabled = true;
+    }
+    #endregion
+
+    #region Apply Force
+    private void ApplyForce(int i)
+    {
+        var currentRigi = GetComponent<Rigidbody>();
+        currentRigi.AddForce(new Vector3(Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f)) * atomProperties.atomicEvents[i].forceAmount, ForceMode.VelocityChange);
+    }
+    #endregion
+
+    private void PlayParticle()
+    {
+        ParticleSystem ps = GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule ma = ps.main;
+        ma.startColor = atomProperties.atomColor;
+        ps.Play();
+    }
 
     #endregion
 }

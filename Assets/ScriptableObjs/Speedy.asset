@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stuckPrevention: 1
   atomSize: 3
-  atomSpeed: 1000
-  drawAtom: 1
-  atomColor: {r: 0.41968465, g: 0.20043232, b: 0.5370165, a: 1}
+  atomSpeed: 100
+  atomColor: {r: 0, g: 1, b: 0, a: 1}
+  colorInstensity: 10
   bondNum: 1
   maxNumOfAtoms: 20
   bondingChart: 00000000
@@ -24,10 +24,14 @@ MonoBehaviour:
   - triggerEvents: 1
     collisionTag: Atom
     specificAtom: 0
-    outputEvents: 3
+    outputEvents: 2
     scaleAmount: {x: -1, y: -1, z: -1}
     speedAmount: 10
-    setColorBasedOnPosition: 1
+    setColorBasedOnPosition: 0
     colorVector: {x: 200, y: 200, z: 200}
-    fixedColor: {r: 0.07035947, g: 1, b: 0, a: 1}
-    parent_Unparent: 0
+    fixedColor: {r: 0, g: 1, b: 0, a: 1}
+    parent_Unparent: 1
+    unparentForce_Radius: {x: 1000, y: 100}
+    changeKinematic: 1
+    hide_Unhide: 0
+    forceAmount: 100000

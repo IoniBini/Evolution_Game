@@ -67,8 +67,20 @@ public class AtomEditor : Editor
                 atom.atomicEvents[i].parent_Unparent = EditorGUILayout.Toggle("Parent / Unparent", atom.atomicEvents[i].parent_Unparent);
                 if (atom.atomicEvents[i].parent_Unparent == false)
                 {
-                    atom.atomicEvents[i].unparentForce_Radius = EditorGUILayout.Vector2Field("Unparent Force and Radius ", atom.atomicEvents[i].unparentForce_Radius);
+                    atom.atomicEvents[i].unparentForce_Radius = EditorGUILayout.Vector2Field("Unparent Force and Radius", atom.atomicEvents[i].unparentForce_Radius);
                 }
+            }
+            else if (atom.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+            {
+                atom.atomicEvents[i].changeKinematic = EditorGUILayout.Toggle("Change Kinematic", atom.atomicEvents[i].changeKinematic);
+            }
+            else if (atom.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+            {
+                atom.atomicEvents[i].hide_Unhide = EditorGUILayout.Toggle("Hide or Unhide", atom.atomicEvents[i].hide_Unhide);
+            }
+            else if (atom.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+            {
+                atom.atomicEvents[i].forceAmount = EditorGUILayout.FloatField("Apply Force", atom.atomicEvents[i].forceAmount);
             }
 
             EditorGUILayout.EndVertical();

@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour
 
     private bool gameStarted = false;
 
+    public bool showArena = true;
+
     [SerializeField] private List<GameObject> arenas;
 
     [System.Serializable]
@@ -75,7 +77,10 @@ public class GameController : MonoBehaviour
         if (arenas.Count != 0 && !gameStarted)
         {
             arenas[0].SetActive(true);
-            arenas[0].GetComponent<MeshRenderer>().enabled = true;
+            if (showArena)
+                arenas[0].GetComponent<MeshRenderer>().enabled = true;
+            else
+                arenas[0].GetComponent<MeshRenderer>().enabled = false;
 
             for (int i = 1; i < arenas.Count; i++)
             {

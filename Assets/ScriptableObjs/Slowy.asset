@@ -15,8 +15,8 @@ MonoBehaviour:
   stuckPrevention: 1
   atomSize: 2
   atomSpeed: 10
-  drawAtom: 1
-  atomColor: {r: 0, g: 1, b: 0.008504152, a: 0}
+  atomColor: {r: 0, g: 1, b: 0.008504152, a: 1}
+  colorInstensity: 1
   bondNum: 0
   maxNumOfAtoms: 0
   bondingChart: 01000000
@@ -29,5 +29,9 @@ MonoBehaviour:
     speedAmount: 0
     setColorBasedOnPosition: 0
     colorVector: {x: 0, y: 0, z: 0}
-    fixedColor: {r: 0, g: 1, b: 0.008504152, a: 0}
+    fixedColor: {r: 0, g: 1, b: 0.008504152, a: 1}
     parent_Unparent: 0
+    unparentForce_Radius: {x: 0, y: 0}
+    changeKinematic: 0
+    hide_Unhide: 0
+    forceAmount: 0
