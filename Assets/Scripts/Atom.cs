@@ -19,8 +19,6 @@ public class Atom : ScriptableObject
     public Color atomColor;
 
     [Min(0)] public int bondNum;
-    [Tooltip("if you leave this at 0, there is no max limit of atom bonds")] [Min(0)]
-    public int maxNumOfAtoms = 0;
     public List<int> bondingChart;
     #endregion
 
@@ -49,5 +47,6 @@ public class Atom : ScriptableObject
         [HideInInspector] public bool changeKinematic;
         [HideInInspector] public bool hide_Unhide;
         [HideInInspector] public float forceAmount;
+        [HideInInspector] public int childrenRequired;
     }
 }

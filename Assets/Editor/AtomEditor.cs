@@ -47,12 +47,17 @@ public class AtomEditor : Editor
             {
                 EditorGUILayout.LabelField("No overrides");
             }
+            else if (atom.atomicEvents[i].triggerEvents.ToString() == "Has_Children_Amount")
+            {
+                atom.atomicEvents[i].childrenRequired = EditorGUILayout.IntField("Required Number of Children", atom.atomicEvents[i].childrenRequired);
+            }
             #endregion
 
             GUILayout.Space(10);
 
             EditorGUILayout.LabelField("Output " + i + ":");
             GUILayout.Space(2);
+
             #region Output Overrides
             if (atom.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
             {

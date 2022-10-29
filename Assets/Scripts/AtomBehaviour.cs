@@ -76,6 +76,8 @@ public class AtomBehaviour : MonoBehaviour
         if (isChild == false)
             if (GetComponent<Rigidbody>().isKinematic == false) AtomMovement();
 
+        HasChildAmount();
+
         //goes through each event present inside the scriptable obj of the atom being used
         for (int i = 0; i < atomProperties.atomicEvents.Length; i++)
         {
@@ -360,6 +362,62 @@ public class AtomBehaviour : MonoBehaviour
     }
     #endregion
 
+    #region Has Child Amount
+    private void HasChildAmount()
+    {
+        //goes through each event present inside the scriptable obj of the atom being used
+        for (int i = 0; i < atomProperties.atomicEvents.Length; i++)
+        {
+            //if it detects one of these events to be a start one, continue
+            if (atomProperties.atomicEvents[i].triggerEvents.ToString() == "Has_Children_Amount")
+            {
+                //any zero or negative value is disregarded, and children obj are also disregarded
+                if (atomProperties.atomicEvents[i].childrenRequired > 0 && isChild == false)
+                {
+                    //only trigger if the num of children is equal or bigger than what is specified
+                    if (transform.childCount >= atomProperties.atomicEvents[i].childrenRequired)
+                    {
+                        //if it detects one of these event outputs to be a scale, continue. Then do the same to check each output type
+                        if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
+                        {
+                            ChangeScale(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Speed")
+                        {
+                            ChangeSpeed(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Color")
+                        {
+                            SetColor(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
+                        {
+                            AtomicBondException(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+                        {
+                            ChangeKinematic(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+                        {
+                            HideUnhide(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+                        {
+                            ApplyForce(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Particles")
+                        {
+                            PlayParticle();
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+    #endregion
+
     #endregion
 
     #region Atom Outputs
@@ -430,40 +488,44 @@ public class AtomBehaviour : MonoBehaviour
         #region Atomic Bond
     public void AtomicBond(Collision collision, int j)
     {
-        //checks if the obj collided with is another atom
-        if (collision.gameObject.tag == "Atom")
+        //check for null in case nothing is being collided with
+        if (collision != null)
         {
-            //goes through the bonding chart to see which atoms this is allowed to bond with
-            for (int i = 0; i < atomProperties.bondingChart.Count; i++)
+            //checks if the obj collided with is another atom
+            if (collision.gameObject.tag == "Atom")
             {
-                //if the other atom's atomicNum is within the list of bonds, then continue
-                if (collision.gameObject.GetComponent<AtomBehaviour>().atomProperties.bondNum == atomProperties.bondingChart[i])
+                //goes through the bonding chart to see which atoms this is allowed to bond with
+                for (int i = 0; i < atomProperties.bondingChart.Count; i++)
                 {
-                    //to determine who becomes a child of who, check to see which atom has the larger atomicNum
-                    if (atomProperties.bondNum > collision.transform.GetComponent<AtomBehaviour>().atomProperties.bondNum)
+                    //if the other atom's atomicNum is within the list of bonds, then continue
+                    if (collision.gameObject.GetComponent<AtomBehaviour>().atomProperties.bondNum == atomProperties.bondingChart[i])
                     {
-                        OtherIntoChild(collision, j);
-                    }
-                    //in case they have the exact same atomicNum, then continue
-                    else if (atomProperties.bondNum == collision.gameObject.GetComponent<AtomBehaviour>().atomProperties.bondNum)
-                    {
-                        //checks to see which of the two has more children, and decides which becomes a child based on who has more
-                        if (transform.childCount > collision.transform.childCount)
+                        //to determine who becomes a child of who, check to see which atom has the larger atomicNum
+                        if (atomProperties.bondNum > collision.transform.GetComponent<AtomBehaviour>().atomProperties.bondNum)
                         {
                             OtherIntoChild(collision, j);
                         }
-                        //in case they also happen to have the exact same number of children, continue
-                        else if (transform.childCount == collision.transform.childCount)
+                        //in case they have the exact same atomicNum, then continue
+                        else if (atomProperties.bondNum == collision.gameObject.GetComponent<AtomBehaviour>().atomProperties.bondNum)
                         {
-                            //the final condition is to check which of the two atoms has a higher sibling index to determine who is dominant
-                            if (transform.GetSiblingIndex() > collision.transform.GetSiblingIndex())
+                            //checks to see which of the two has more children, and decides which becomes a child based on who has more
+                            if (transform.childCount > collision.transform.childCount)
                             {
                                 OtherIntoChild(collision, j);
                             }
+                            //in case they also happen to have the exact same number of children, continue
+                            else if (transform.childCount == collision.transform.childCount)
+                            {
+                                //the final condition is to check which of the two atoms has a higher sibling index to determine who is dominant
+                                if (transform.GetSiblingIndex() > collision.transform.GetSiblingIndex())
+                                {
+                                    OtherIntoChild(collision, j);
+                                }
+                            }
                         }
-                    }
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
@@ -547,28 +609,40 @@ public class AtomBehaviour : MonoBehaviour
                 other.gameObject.GetComponent<AtomBehaviour>().OnBecomesChild();
                 BecomesParent();
             }
-
-            
-
-            /*if (transform.childCount >= atomProperties.maxNumOfAtoms && atomProperties.maxNumOfAtoms != 0)
-            {
-                GetComponent<Rigidbody>().isKinematic = true;
-            }*/
         }
-        else
+        else if (!atomProperties.atomicEvents[i].parent_Unparent)
         {
             for (int j = transform.childCount - 1; j > 0; j--)
             {
                 GameObject currentChild = transform.GetChild(j).gameObject;
                 var newRigid = currentChild.AddComponent<Rigidbody>();
                 newRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                newRigid.AddExplosionForce(atomProperties.atomicEvents[i].unparentForce_Radius.x, transform.position, atomProperties.atomicEvents[i].unparentForce_Radius.y, 0, ForceMode.VelocityChange);
                 currentChild.transform.parent = null;
                 currentChild.GetComponent<AtomBehaviour>().isChild = false;
                 GetComponent<LineRenderer>().positionCount = 1;
-                newRigid.AddExplosionForce(atomProperties.atomicEvents[i].unparentForce_Radius.x, transform.position, atomProperties.atomicEvents[i].unparentForce_Radius.y, 0, ForceMode.VelocityChange);
             }
         }
 
+    }
+    #endregion
+
+    #region Atomic Bond Exception
+    private void AtomicBondException(int i)
+    {
+        if (!atomProperties.atomicEvents[i].parent_Unparent)
+        {
+            for (int j = transform.childCount - 1; j >= 0; j--)
+            {
+                GameObject currentChild = transform.GetChild(j).gameObject;
+                currentChild.transform.parent = null;
+                currentChild.GetComponent<AtomBehaviour>().isChild = false;
+                GetComponent<LineRenderer>().positionCount = 1;
+                var newRigid = currentChild.AddComponent<Rigidbody>();
+                newRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                newRigid.AddExplosionForce(atomProperties.atomicEvents[i].unparentForce_Radius.x, transform.position, atomProperties.atomicEvents[i].unparentForce_Radius.y, 0, ForceMode.VelocityChange);
+            }
+        }
     }
     #endregion
 

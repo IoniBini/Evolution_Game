@@ -91,14 +91,16 @@ public class GameController : MonoBehaviour
         Gizmos.color = new Color32(255, 255, 255, 100);
         Gizmos.DrawCube(transform.position, new Vector3(spawnRadius, spawnRadius, spawnRadius));
 
-        //probably need to choose a better way to draw this gizmo or at least make it always update
-        for (int i = 0; i < atomSpawner.Length - 1; i++)
-        {
-            Gizmos.color = atomSpawner[i].atomScriptable.atomColor;
-            Gizmos.color = new Color(atomSpawner[i].atomScriptable.atomColor.r, atomSpawner[i].atomScriptable.atomColor.g, atomSpawner[i].atomScriptable.atomColor.b, 0.4f);
-            
-            if (atomSpawner[i].atomScriptable.atomicEvents[i].setColorBasedOnPosition == true)
-            Gizmos.DrawCube(transform.position, atomSpawner[i].atomScriptable.atomicEvents[i].colorVector);
+        for (int i = 0; i < atomSpawner.Length; i++)
+        {            
+            for (int j = 0; atomSpawner[i].atomScriptable.atomicEvents.Length > j; j++)
+            {
+                if (atomSpawner[i].atomScriptable.atomicEvents[j].setColorBasedOnPosition == true)
+                {
+                    Gizmos.color = new Color(atomSpawner[i].atomScriptable.atomColor.r, atomSpawner[i].atomScriptable.atomColor.g, atomSpawner[i].atomScriptable.atomColor.b, 0.4f);
+                    Gizmos.DrawCube(transform.position, atomSpawner[i].atomScriptable.atomicEvents[j].colorVector);
+                }
+            }
         }
     }
 }
