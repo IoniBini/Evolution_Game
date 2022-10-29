@@ -16,20 +16,112 @@ public class AtomBehaviour : MonoBehaviour
     [HideInInspector] public bool preventColorUpdate = false;
 
     #region Atom Triggers
+
+        #region Start
     void Start()
     {
         RandomizeDirection();
 
         target = GetComponent<Renderer>();
         propertyBlock = new MaterialPropertyBlock();
-    }
 
+        //goes through each event present inside the scriptable obj of the atom being used
+        for (int i = 0; i < atomProperties.atomicEvents.Length; i++)
+        {
+            //if it detects one of these events to be a start one, continue
+            if (atomProperties.atomicEvents[i].triggerEvents.ToString() == "Start")
+            {
+                //if it detects one of these event outputs to be a scale, continue. Then do the same to check each output type
+                if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
+                {
+                    ChangeScale(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Speed")
+                {
+                    ChangeSpeed(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Color")
+                {
+                    SetColor(i);
+                }
+                //I skipped this one because if you dont have a collision, there is nothing to bond with
+                /*else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
+                {
+                    AtomicBond(collision, i);
+                }*/
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+                {
+                    ChangeKinematic(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+                {
+                    HideUnhide(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+                {
+                    ApplyForce(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Particles")
+                {
+                    PlayParticle();
+                }
+            }
+        }
+    }
+    #endregion
+
+        #region Always Update
     private void Update()
     {
         if (isChild == false)
             if (GetComponent<Rigidbody>().isKinematic == false) AtomMovement();
-    }
 
+        //goes through each event present inside the scriptable obj of the atom being used
+        for (int i = 0; i < atomProperties.atomicEvents.Length; i++)
+        {
+            //if it detects one of these events to be a start one, continue
+            if (atomProperties.atomicEvents[i].triggerEvents.ToString() == "Always_Update")
+            {
+                //if it detects one of these event outputs to be a scale, continue. Then do the same to check each output type
+                if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
+                {
+                    ChangeScale(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Speed")
+                {
+                    ChangeSpeed(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Color")
+                {
+                    SetColor(i);
+                }
+                //I skipped this one because if you dont have a collision, there is nothing to bond with
+                /*else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
+                {
+                    AtomicBond(collision, i);
+                }*/
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+                {
+                    ChangeKinematic(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+                {
+                    HideUnhide(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+                {
+                    ApplyForce(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Particles")
+                {
+                    PlayParticle();
+                }
+            }
+        }
+    }
+    #endregion
+
+        #region Collision
     private void OnCollisionEnter(Collision collision)
     {
         //goes through each event present inside the scriptable obj of the atom being used
@@ -84,7 +176,6 @@ public class AtomBehaviour : MonoBehaviour
                     }  
                     else
                     {
-                        //if it detects one of these event outputs to be a scale, continue. Then do the same to check each output type
                         if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
                         {
                             ChangeScale(i);
@@ -97,16 +188,64 @@ public class AtomBehaviour : MonoBehaviour
                         {
                             SetColor(i);
                         }
-                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
+                        //I skip this one because you cannot form an atomic bond with a non atom object anyways
+                        /*else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
                         {
                             AtomicBond(collision, i);
+                        }*/
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+                        {
+                            ChangeKinematic(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+                        {
+                            HideUnhide(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+                        {
+                            ApplyForce(i);
+                        }
+                        else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Particles")
+                        {
+                            PlayParticle();
                         }
                     }
                 }
                 //this makes it so that if there is nothing written in that field, collide with anything
                 else if (atomProperties.atomicEvents[i].collisionTag == "")
                 {
-
+                    if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
+                    {
+                        ChangeScale(i);
+                    }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Speed")
+                    {
+                        ChangeSpeed(i);
+                    }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Color")
+                    {
+                        SetColor(i);
+                    }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
+                    {
+                        AtomicBond(collision, i);
+                    }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+                    {
+                        ChangeKinematic(i);
+                    }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+                    {
+                        HideUnhide(i);
+                    }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+                    {
+                        ApplyForce(i);
+                    }
+                    else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Particles")
+                    {
+                        PlayParticle();
+                    }
                 }
             }
         }
@@ -120,49 +259,108 @@ public class AtomBehaviour : MonoBehaviour
 
         Reflection(dir, vel, currentPos);
     }
+    #endregion
 
-    private void OnTriggerEnter(Collider other)
+        #region Becomes Child
+    //had to make this void public because it is being accessed by the atom that has parented this obj
+    public void OnBecomesChild()
     {
-        /*
-        //checks if the obj collided with is another atom
-        if (other.tag == "Atom")
+        //goes through each event present inside the scriptable obj of the atom being used
+        for (int i = 0; i < atomProperties.atomicEvents.Length; i++)
         {
-            //goes through the bonding chart to see which atoms this is allowed to bond with
-            for (int i = 0; i < atomProperties.bondingChart.Count; i++)
+            //if it detects one of these events to be a start one, continue
+            if (atomProperties.atomicEvents[i].triggerEvents.ToString() == "Becomes_Child")
             {
-                //if the other atom's atomicNum is within the list of bonds, then continue
-                if (other.GetComponent<AtomBehaviour>().atomProperties.bondNum == atomProperties.bondingChart[i])
+                //if it detects one of these event outputs to be a scale, continue. Then do the same to check each output type
+                if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
                 {
-                    //to determine who becomes a child of who, check to see which atom has the larger atomicNum
-                    if (atomProperties.bondNum > other.GetComponent<AtomBehaviour>().atomProperties.bondNum)
-                    {
-                        OtherIntoChild(other);
-                    }
-                    //in case they have the exact same atomicNum, then continue
-                    else if (atomProperties.bondNum == other.GetComponent<AtomBehaviour>().atomProperties.bondNum)
-                    {
-                        //checks to see which of the two has more children, and decides which becomes a child based on who has more
-                        if (transform.childCount > other.transform.childCount)
-                        {
-                            OtherIntoChild(other);
-                        }
-                        //in case they also happen to have the exact same number of children, continue
-                        else if (transform.childCount == other.transform.childCount)
-                        {
-                            //the final condition is to check which of the two atoms has a higher sibling index to determine who is dominant
-                            if (transform.GetSiblingIndex() > other.transform.GetSiblingIndex())
-                            {
-                                OtherIntoChild(other);
-                            }
-                        }
-                    }
-
-                    break;
+                    ChangeScale(i);
+                }
+                //the speed here wont be visibly different until this obj becomes unparented, since while it is a child, it has no rigidbody
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Speed")
+                {
+                    ChangeSpeed(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Color")
+                {
+                    SetColor(i);
+                }
+                //I skipped this one because if you dont have a collision, there is nothing to bond with
+                /*else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
+                {
+                    AtomicBond(collision, i);
+                }*/
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+                {
+                    ChangeKinematic(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+                {
+                    HideUnhide(i);
+                }
+                //not used because it does not have a rigidbody, hence cannot be used
+                /*else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+                {
+                    ApplyForce(i);
+                }*/
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Particles")
+                {
+                    PlayParticle();
                 }
             }
-        }*/
+        }
     }
-#endregion
+    #endregion
+
+        #region Becomes Parent
+    private void BecomesParent()
+    {
+        //goes through each event present inside the scriptable obj of the atom being used
+        for (int i = 0; i < atomProperties.atomicEvents.Length; i++)
+        {
+            //if it detects one of these events to be a start one, continue
+            if (atomProperties.atomicEvents[i].triggerEvents.ToString() == "Becomes_Parent")
+            {
+                //if it detects one of these event outputs to be a scale, continue. Then do the same to check each output type
+                if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
+                {
+                    ChangeScale(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Speed")
+                {
+                    ChangeSpeed(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Color")
+                {
+                    SetColor(i);
+                }
+                //I skipped this one because becoming a parent means that you already collided with something, making this redundant
+                /*else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Atomic_Bond")
+                {
+                    AtomicBond(collision, i);
+                }*/
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Change_Kinematic")
+                {
+                    ChangeKinematic(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Hide_Unhide")
+                {
+                    HideUnhide(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
+                {
+                    ApplyForce(i);
+                }
+                else if (atomProperties.atomicEvents[i].outputEvents.ToString() == "Particles")
+                {
+                    PlayParticle();
+                }
+            }
+        }
+    }
+    #endregion
+
+    #endregion
 
     #region Atom Outputs
 
@@ -172,7 +370,7 @@ public class AtomBehaviour : MonoBehaviour
         if (atomProperties.atomicEvents[i].setColorBasedOnPosition == false)
         {
             atomProperties.atomColor = atomProperties.atomicEvents[i].fixedColor;
-            propertyBlock.SetColor("_Color", atomProperties.atomColor * atomProperties.colorInstensity);
+            propertyBlock.SetColor("_Color", atomProperties.atomColor * atomProperties.atomicEvents[i].colorIntensity);
         }
         else
         {
@@ -181,14 +379,14 @@ public class AtomBehaviour : MonoBehaviour
             float lerpB = Mathf.InverseLerp(atomProperties.atomicEvents[i].colorVector.z * -1, atomProperties.atomicEvents[i].colorVector.z, transform.position.z);
 
             atomProperties.atomColor = new Color(lerpR, lerpG, lerpB);
-            propertyBlock.SetColor("_Color", new Color(lerpR, lerpG, lerpB) * atomProperties.colorInstensity);
+            propertyBlock.SetColor("_Color", new Color(lerpR, lerpG, lerpB) * atomProperties.atomicEvents[i].colorIntensity);
         }
         
         target.SetPropertyBlock(propertyBlock);
     }
     #endregion
 
-    #region Reflection
+        #region Reflection
     public void Reflection(Vector3 dir, Vector3 vel, Vector3 currentPos)
     {
         //https://answers.unity.com/questions/377616/how-to-detect-which-side-of-a-box-collider-was-hit.html
@@ -211,7 +409,7 @@ public class AtomBehaviour : MonoBehaviour
     }
     #endregion
 
-    #region Randomize Direction
+        #region Randomize Direction
     public void RandomizeDirection()
     {
         atomDir.x = Random.Range(-0.01f, 0.01f);
@@ -222,14 +420,14 @@ public class AtomBehaviour : MonoBehaviour
     }
     #endregion
 
-    #region Atom Movement
+        #region Atom Movement
     public void AtomMovement()
     {
         GetComponent<Rigidbody>().AddForce((atomDir) * atomProperties.atomSpeed, ForceMode.VelocityChange);
     }
     #endregion
 
-    #region Atomic Bond
+        #region Atomic Bond
     public void AtomicBond(Collision collision, int j)
     {
         //checks if the obj collided with is another atom
@@ -272,8 +470,64 @@ public class AtomBehaviour : MonoBehaviour
     }
     #endregion
 
-    #region Other Into Child
-    public void OtherIntoChild(Collision other, int i) //add new bool here for unparenting
+        #region Change Scale
+    private void ChangeScale(int i)
+    {
+        //gonna have to make it so that it limits the minimum amount of scale it can reach, it should not be allowed to go lower than 0
+        transform.localScale += atomProperties.atomicEvents[i].scaleAmount;
+    }
+    #endregion
+
+        #region Change Speed
+    private void ChangeSpeed(int i)
+    {
+        atomProperties.atomSpeed += atomProperties.atomicEvents[i].speedAmount;
+    }
+    #endregion
+
+        #region Change Kinematic
+    private void ChangeKinematic(int i)
+    {
+        if (atomProperties.atomicEvents[i].changeKinematic)
+            GetComponent<Rigidbody>().isKinematic = true;
+        else
+            GetComponent<Rigidbody>().isKinematic = false;
+    }
+    #endregion
+
+        #region Hide Unhide
+    private void HideUnhide(int i)
+    {
+        if (!atomProperties.atomicEvents[i].hide_Unhide)
+            GetComponent<MeshRenderer>().enabled = false;
+        else
+            GetComponent<MeshRenderer>().enabled = true;
+    }
+    #endregion
+
+        #region Apply Force
+    private void ApplyForce(int i)
+    {
+        if (GetComponent<Rigidbody>() != null)
+        {
+            var currentRigi = GetComponent<Rigidbody>();
+            currentRigi.AddForce(new Vector3(Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f)) * atomProperties.atomicEvents[i].forceAmount, ForceMode.VelocityChange);
+        }
+    }
+    #endregion
+
+        #region Play Particle
+    private void PlayParticle()
+    {
+        ParticleSystem ps = GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule ma = ps.main;
+        ma.startColor = atomProperties.atomColor;
+        ps.Play();
+    }
+    #endregion
+
+        #region Other Into Child
+    private void OtherIntoChild(Collision other, int i) //add new bool here for unparenting
     {
         if (atomProperties.atomicEvents[i].parent_Unparent)
         {
@@ -288,9 +542,13 @@ public class AtomBehaviour : MonoBehaviour
                 line.SetPosition(transform.childCount, other.transform.localPosition);
                 line.startColor = atomProperties.atomColor;
                 line.endColor = atomProperties.atomColor;
-                line.startWidth = atomProperties.atomSize / 2;
-                line.endWidth = atomProperties.atomSize / 2;
+                line.startWidth = ((transform.localScale.x + transform.localScale.y + transform.localScale.z) / 3) / 2;
+                line.endWidth = ((transform.localScale.x + transform.localScale.y + transform.localScale.z) / 3) / 2;
+                other.gameObject.GetComponent<AtomBehaviour>().OnBecomesChild();
+                BecomesParent();
             }
+
+            
 
             /*if (transform.childCount >= atomProperties.maxNumOfAtoms && atomProperties.maxNumOfAtoms != 0)
             {
@@ -310,60 +568,9 @@ public class AtomBehaviour : MonoBehaviour
                 newRigid.AddExplosionForce(atomProperties.atomicEvents[i].unparentForce_Radius.x, transform.position, atomProperties.atomicEvents[i].unparentForce_Radius.y, 0, ForceMode.VelocityChange);
             }
         }
-        
+
     }
     #endregion
-
-    #region Change Scale
-    private void ChangeScale(int i)
-    {
-        //gonna have to make it so that it limits the minimum amount of scale it can reach, it should not be allowed to go lower than 0
-        transform.localScale += atomProperties.atomicEvents[i].scaleAmount;
-    }
-    #endregion
-
-    #region Change Speed
-    private void ChangeSpeed(int i)
-    {
-        atomProperties.atomSpeed += atomProperties.atomicEvents[i].speedAmount;
-    }
-    #endregion
-
-    #region Change Kinematic
-    private void ChangeKinematic(int i)
-    {
-        if (atomProperties.atomicEvents[i].changeKinematic)
-            GetComponent<Rigidbody>().isKinematic = true;
-        else
-            GetComponent<Rigidbody>().isKinematic = false;
-    }
-    #endregion
-
-    #region Hide Unhide
-    private void HideUnhide(int i)
-    {
-        if (!atomProperties.atomicEvents[i].hide_Unhide)
-            GetComponent<MeshRenderer>().enabled = false;
-        else
-            GetComponent<MeshRenderer>().enabled = true;
-    }
-    #endregion
-
-    #region Apply Force
-    private void ApplyForce(int i)
-    {
-        var currentRigi = GetComponent<Rigidbody>();
-        currentRigi.AddForce(new Vector3(Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f)) * atomProperties.atomicEvents[i].forceAmount, ForceMode.VelocityChange);
-    }
-    #endregion
-
-    private void PlayParticle()
-    {
-        ParticleSystem ps = GetComponent<ParticleSystem>();
-        ParticleSystem.MainModule ma = ps.main;
-        ma.startColor = atomProperties.atomColor;
-        ps.Play();
-    }
 
     #endregion
 }

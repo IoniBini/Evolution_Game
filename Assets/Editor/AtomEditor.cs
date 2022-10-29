@@ -17,7 +17,7 @@ public class AtomEditor : Editor
         {
             EditorGUILayout.BeginVertical();
 
-            EditorGUILayout.LabelField("Trigger " + i);
+            EditorGUILayout.LabelField("Trigger " + i + ":");
             GUILayout.Space(2);
 
             #region Trigger Overrides
@@ -31,11 +31,27 @@ public class AtomEditor : Editor
                     atom.atomicEvents[i].specificAtom = EditorGUILayout.IntField("Specific Atom", atom.atomicEvents[i].specificAtom);
                 }
             }
+            else if (atom.atomicEvents[i].triggerEvents.ToString() == "Start")
+            {
+                EditorGUILayout.LabelField("No overrides");
+            }
+            else if (atom.atomicEvents[i].triggerEvents.ToString() == "Always_Update")
+            {
+                EditorGUILayout.LabelField("No overrides");
+            }
+            else if (atom.atomicEvents[i].triggerEvents.ToString() == "Becomes_Child")
+            {
+                EditorGUILayout.LabelField("No overrides");
+            }
+            else if (atom.atomicEvents[i].triggerEvents.ToString() == "Becomes_Parent")
+            {
+                EditorGUILayout.LabelField("No overrides");
+            }
             #endregion
 
             GUILayout.Space(10);
 
-            EditorGUILayout.LabelField("Output " + i);
+            EditorGUILayout.LabelField("Output " + i + ":");
             GUILayout.Space(2);
             #region Output Overrides
             if (atom.atomicEvents[i].outputEvents.ToString() == "Change_Scale")
@@ -46,8 +62,9 @@ public class AtomEditor : Editor
             {
                 atom.atomicEvents[i].speedAmount = EditorGUILayout.FloatField("Change Speed ", atom.atomicEvents[i].speedAmount);
             }
-            else if(atom.atomicEvents[i].outputEvents.ToString() == "Change_Color")
+            else if (atom.atomicEvents[i].outputEvents.ToString() == "Change_Color")
             {
+                atom.atomicEvents[i].colorIntensity = EditorGUILayout.FloatField("Change Color Intensity ", atom.atomicEvents[i].colorIntensity);
                 atom.atomicEvents[i].setColorBasedOnPosition = EditorGUILayout.Toggle("Set Color Based On Position", atom.atomicEvents[i].setColorBasedOnPosition);
 
                 if (atom.atomicEvents[i].setColorBasedOnPosition == false)
@@ -63,7 +80,8 @@ public class AtomEditor : Editor
             {
                 //the reason I decided against making each event have its own values was because each atom should only have one unique value as opposed to a
                 //value per event, which would mean that I would end up making multiple copies of the same value in the inspector, which would be pointless
-                EditorGUILayout.LabelField("Refer back to the variables above: bondNum, maxNumOfAtoms and bondingChart");
+                EditorGUILayout.LabelField("Refer back to the variables above: Bond Num, Max Num Of Atoms and Bonding Chart");
+                EditorGUILayout.LabelField("DO NOT use Atomic Bond if you are not using a collision, it will NOT work");
                 atom.atomicEvents[i].parent_Unparent = EditorGUILayout.Toggle("Parent / Unparent", atom.atomicEvents[i].parent_Unparent);
                 if (atom.atomicEvents[i].parent_Unparent == false)
                 {
@@ -80,8 +98,15 @@ public class AtomEditor : Editor
             }
             else if (atom.atomicEvents[i].outputEvents.ToString() == "Apply_Force")
             {
+                EditorGUILayout.LabelField("This will not work if the object in question is a child, because it will not have a rigidbody");
                 atom.atomicEvents[i].forceAmount = EditorGUILayout.FloatField("Apply Force", atom.atomicEvents[i].forceAmount);
             }
+            else if (atom.atomicEvents[i].outputEvents.ToString() == "Particles")
+            {
+                //I decided to stop adding features so I just didn't add any particle overrides, although its simple to do so if I want to
+                EditorGUILayout.LabelField("No output overrides");
+            }
+
 
             EditorGUILayout.EndVertical();
 

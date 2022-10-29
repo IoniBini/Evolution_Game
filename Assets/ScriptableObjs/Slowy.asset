@@ -13,15 +13,14 @@ MonoBehaviour:
   m_Name: Slowy
   m_EditorClassIdentifier: 
   stuckPrevention: 1
-  atomSize: 2
   atomSpeed: 10
-  atomColor: {r: 0, g: 1, b: 0.008504152, a: 1}
+  atomColor: {r: 0, g: 1, b: 0.97092485, a: 1}
   colorInstensity: 1
   bondNum: 0
   maxNumOfAtoms: 0
   bondingChart: 01000000
   atomicEvents:
-  - triggerEvents: 1
+  - triggerEvents: 3
     collisionTag: Atom
     specificAtom: 1
     outputEvents: 2
@@ -29,7 +28,7 @@ MonoBehaviour:
     speedAmount: 0
     setColorBasedOnPosition: 0
     colorVector: {x: 0, y: 0, z: 0}
-    fixedColor: {r: 0, g: 1, b: 0.008504152, a: 1}
+    fixedColor: {r: 0.3837514, g: 0, b: 1, a: 1}
     parent_Unparent: 0
     unparentForce_Radius: {x: 0, y: 0}
     changeKinematic: 0

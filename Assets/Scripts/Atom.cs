@@ -15,10 +15,8 @@ public class Atom : ScriptableObject
     [Space]
 
     public bool stuckPrevention = false;
-    public float atomSize = 1;
     public float atomSpeed = 1;
     public Color atomColor;
-    public float colorInstensity = 1;
 
     [Min(0)] public int bondNum;
     [Tooltip("if you leave this at 0, there is no max limit of atom bonds")] [Min(0)]
@@ -33,7 +31,7 @@ public class Atom : ScriptableObject
     [System.Serializable]
     public struct AtomEvents
     {
-        public enum trigger { Start, Collision, Trigger_Area, Always_Update, Becomes_Child, Becomes_Parent, Has_Children_Amount }
+        public enum trigger { Start, Collision, Always_Update, Becomes_Child, Becomes_Parent, Has_Children_Amount }
         public trigger triggerEvents;
         [HideInInspector] public string collisionTag;
         [HideInInspector] public int specificAtom;
@@ -44,6 +42,7 @@ public class Atom : ScriptableObject
         [HideInInspector] public float speedAmount;
         [HideInInspector] public bool setColorBasedOnPosition;
         [HideInInspector] public Vector3 colorVector;
+        [HideInInspector] public float colorIntensity;
         [HideInInspector] public Color fixedColor;
         [HideInInspector] public bool parent_Unparent;
         [HideInInspector] public Vector2 unparentForce_Radius;
