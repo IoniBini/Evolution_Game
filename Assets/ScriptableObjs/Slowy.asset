@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Slowy
   m_EditorClassIdentifier: 
   stuckPrevention: 1
-  atomSpeed: 10
-  atomColor: {r: 0.537065, g: 0.38309583, b: 0.38757208, a: 1}
+  atomSpeed: 1
+  atomColor: {r: 0.5918413, g: 0.71046996, b: 0.36567327, a: 1}
   bondNum: 0
   bondingChart: 01000000
   atomicEvents:
@@ -24,13 +24,48 @@ MonoBehaviour:
     outputEvents: 2
     scaleAmount: {x: 0, y: 0, z: 0}
     speedAmount: 0
+    setColorBasedOnPosition: 0
+    colorVector: {x: 200, y: 200, z: 200}
+    colorVectorGizmo: {r: 1, g: 1, b: 1, a: 0.48235294}
+    colorIntensity: 2
+    fixedColor: {r: 1, g: 1, b: 1, a: 1}
+    parent_Unparent: 0
+    unparentForce_Radius: {x: 0, y: 0}
+    changeKinematic: 0
+    hide_Unhide: 0
+    forceAmount: 0
+    childrenRequired: 0
+  - triggerEvents: 1
+    collisionTag: Atom
+    specificAtom: 1
+    outputEvents: 2
+    scaleAmount: {x: 0, y: 0, z: 0}
+    speedAmount: 0
     setColorBasedOnPosition: 1
     colorVector: {x: 200, y: 200, z: 200}
-    colorIntensity: 4
+    colorVectorGizmo: {r: 1, g: 1, b: 1, a: 0.48235294}
+    colorIntensity: 2
     fixedColor: {r: 0.3837514, g: 0, b: 1, a: 1}
     parent_Unparent: 0
     unparentForce_Radius: {x: 0, y: 0}
     changeKinematic: 0
     hide_Unhide: 0
     forceAmount: 0
+    childrenRequired: 0
+  - triggerEvents: 2
+    collisionTag: Atom
+    specificAtom: 1
+    outputEvents: 6
+    scaleAmount: {x: 0, y: 0, z: 0}
+    speedAmount: 0
+    setColorBasedOnPosition: 1
+    colorVector: {x: 200, y: 200, z: 200}
+    colorVectorGizmo: {r: 1, g: 1, b: 1, a: 0.48235294}
+    colorIntensity: 2
+    fixedColor: {r: 0.3837514, g: 0, b: 1, a: 1}
+    parent_Unparent: 0
+    unparentForce_Radius: {x: 0, y: 0}
+    changeKinematic: 0
+    hide_Unhide: 0
+    forceAmount: 50
     childrenRequired: 0
